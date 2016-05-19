@@ -2,7 +2,7 @@ import requests
 import os.path
 import sys
 
-class librato_chart_sender():
+class LibratoChartSender():
 	def readApiKey(self, fileName):
 		if os.path.exists(fileName):
 			f = open("ix.key", "r")
@@ -26,5 +26,5 @@ class librato_chart_sender():
 		return output
 
 
-librato = librato_chart_sender().main("pawel-1", "8927119", "ix.key")
+librato = LibratoChartSender().main("pawel-1", "8927119", "ix.key")
 print librato
