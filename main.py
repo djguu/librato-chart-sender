@@ -1,9 +1,22 @@
-import urllib2
+import requests
+import os.path
 
-account_name = "pawel-1"
-invoice_id = "8927119"
-f = open("ix.key","r")
-api_key = f.read()
+try:
+	account_name = "pawel-1"
+	invoice_id = "8927119"
 
-temp = urllib2.urlopen("https://"+account_name+".app.invoicexpress.com/invoices/"+invoice_id+".xml?api_key="+api_key).read()
-print temp
+	if os.stat('ix.key').st_size > 0:
+		f = open("ix.key","r")
+		api_key = f.read()
+
+		r = requests.get("https://"+account_name+".app.invoicexpress.com/invoices/"+invoice_id+".xml?api_key="+api_key)
+
+		print r.text
+
+	else:
+		print "Key file is Empty. Exiting"
+        sys.exit()
+
+except OSError:
+    print "Key file not found. Exiting"
+    sys.exit()
