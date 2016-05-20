@@ -39,16 +39,17 @@ class LibratoChartSender():
 			response_object = json.loads(snapshots_image_response.text)
 			if response_object['image_href'] != None:
 				snapshots_image_response = response_object['image_href']
-		print snapshots_image_response
+				print str(time)
+		# ipdb.set_trace()
 		return snapshots_image_response
 
 	def main(self, chart_id, duration, user, apkeyfile):
 		api_key = self.read_api_key(apkeyfile)
 		snapshot_url = self.make_snapshot(chart_id, duration, user, api_key)['href']
-		image_url = self.download_snapshot(snapshot_url, user, api_key)['image_href']
+		image_url = self.download_snapshot(snapshot_url, user, api_key)
 		print image_url
 
 
-LibratoChartSender().main("3419", "604800", "systems@rupeal.com", "ix.key")
+LibratoChartSender().main("3419", "604800", "systems@rupeal.com", "librato.key")
 
 
