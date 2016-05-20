@@ -1,6 +1,8 @@
 import requests
 import os.path
 import sys
+import librato
+
 
 class LibratoChartSender():
 	def read_api_key(self, fileName):
@@ -28,3 +30,7 @@ class LibratoChartSender():
 
 librato = LibratoChartSender().main("pawel-1", "8927119", "ix.key")
 print librato
+
+"""
+api = librato.connect("systems@rupeal.com", "b4bf0341c8cdd3b429826a18d1a07582895fa12c7fb97eb8f2c6bdb015004b86")
+print api.get_chart(3419, 606)"""
