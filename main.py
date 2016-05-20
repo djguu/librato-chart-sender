@@ -1,48 +1,12 @@
 import requests
 import os.path
 import sys
-import librato
 import json
-
-class LibratoChartMaker():
-	def read_api_key(self, fileName):
-		if os.path.exists(fileName):
-			f = open(fileName, "r")
-			api_key = f.read()
-			if(len(api_key) != 0):
-				return api_key
-			else:
-				return "Key file is empty. Exiting"
-				sys.exit()
-		else:
-			print "Key file not found. Exiting"
-	    	sys.exit()
-
-	def make_request(self, chart_id, duration, user, api_key):
-		url = "https://metrics-api.librato.com/v1/snapshots"
-		param1 = "subject[chart][id]="+str(chart_id)
-		param2 = "subject[chart][source]=*"
-		param3 = "subject[chart][type]=stacked"
-		param4 = "duration="+str(duration)
-
-		snap = requests.post(url+"?"+param1+"&"+param2+"&"+param3+"&"+param4, auth = (user, api_key))
-		return snap.text
-
-	# def send_request(self, acc_name, iv_id, api_key):
-	# 	r = requests.get("https://" + acc_name + ".app.invoicexpress.com/invoices/" + iv_id + ".xml?api_key=" + api_key)
-	# 	return r.text
-
-	# def main(self, acc_name, iv_id, apkeyfile):
-	# 	api_key = self.read_api_key(apkeyfile)
-	# 	output = self.send_request(acc_name, iv_id, api_key)
-	# 	return output
-
-	def main(self, chart_id, duration, user, apkeyfile):
-		api_key = self.read_api_key(apkeyfile)
-		output = self.make_request(chart_id, duration, user, api_key)
-		output = json.loads(output)
-		return output['href']
-
+import urllib3
+import requests.packages.urllib3
+requests.packages.urllib3.disable_warnings()
+import ipdb
+import time
 class LibratoChartSender():
 
 	def read_api_key(self, fileName):
@@ -58,26 +22,33 @@ class LibratoChartSender():
 			print "Key file not found. Exiting"
 	    	sys.exit()
 
-	def send_request(self, snap_url, user, api_key):
-		url = snap_url
+	def make_snapshot(self, chart_id, duration, user, api_key):
+		url = "https://metrics-api.librato.com/v1/snapshots?" \
+			   "subject[chart][id]={chart_id}&" \
+			   "subject[chart][source]=*&" \
+			   "subject[chart][type]=stacked&" \
+			   "duration={duration}"
+		snapshot_response = requests.post(url.format(chart_id=chart_id, duration=duration), auth = (user, api_key))
+		return json.loads(snapshot_response.text)
 
-		snap = requests.get(url, auth = (user, api_key))
-		print snap
-		return snap.text
+	def download_snapshot(self, url, user, api_key):
+		snapshots_image_response = None
+		while snapshots_image_response == None:
+		 	time.sleep(2)
+			snapshots_image_response = requests.get(url, auth = (user, api_key))
+			response_object = json.loads(snapshots_image_response.text)
+			if response_object['image_href'] != None:
+				snapshots_image_response = response_object['image_href']
+		print snapshots_image_response
+		return snapshots_image_response
 
-	def main(self, snap, user, apkeyfile):
+	def main(self, chart_id, duration, user, apkeyfile):
 		api_key = self.read_api_key(apkeyfile)
-		output = self.send_request(snap, user, api_key)
-		print output
-		output = json.loads(output)
-		return output['image_href']
+		snapshot_url = self.make_snapshot(chart_id, duration, user, api_key)['href']
+		image_url = self.download_snapshot(snapshot_url, user, api_key)['image_href']
+		print image_url
 
 
-
-# librato = LibratoChartSender().main("pawel-1", "8927119", "librato.key")
-make_snap = LibratoChartMaker().main("3419", "604800", "systems@rupeal.com", "librato.key")
-print make_snap
-get_snap = LibratoChartSender().main(make_snap, "systems@rupeal.com", "librato.key")
-print get_snap
+LibratoChartSender().main("3419", "604800", "systems@rupeal.com", "ix.key")
 
 
