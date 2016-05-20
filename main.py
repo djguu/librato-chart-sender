@@ -40,9 +40,44 @@ class LibratoChartMaker():
 	def main(self, chart_id, duration, user, apkeyfile):
 		api_key = self.read_api_key(apkeyfile)
 		output = self.make_request(chart_id, duration, user, api_key)
-		return output
+		output = json.loads(output)
+		return output['href']
+
+class LibratoChartSender():
+
+	def read_api_key(self, fileName):
+		if os.path.exists(fileName):
+			f = open(fileName, "r")
+			api_key = f.read()
+			if(len(api_key) != 0):
+				return api_key
+			else:
+				return "Key file is empty. Exiting"
+				sys.exit()
+		else:
+			print "Key file not found. Exiting"
+	    	sys.exit()
+
+	def send_request(self, snap_url, user, api_key):
+		url = snap_url
+
+		snap = requests.get(url, auth = (user, api_key))
+		print snap
+		return snap.text
+
+	def main(self, snap, user, apkeyfile):
+		api_key = self.read_api_key(apkeyfile)
+		output = self.send_request(snap, user, api_key)
+		print output
+		output = json.loads(output)
+		return output['image_href']
+
+
 
 # librato = LibratoChartSender().main("pawel-1", "8927119", "librato.key")
-librato = LibratoChartMaker().main("3419", "604800", "systems@rupeal.com", "librato.key")
-temp = json.loads(librato)
-print temp['href']
+make_snap = LibratoChartMaker().main("3419", "604800", "systems@rupeal.com", "librato.key")
+print make_snap
+get_snap = LibratoChartSender().main(make_snap, "systems@rupeal.com", "librato.key")
+print get_snap
+
+
