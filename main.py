@@ -4,7 +4,7 @@ import sys
 import librato
 import json
 
-class LibratoChartSender():
+class LibratoChartMaker():
 	def read_api_key(self, fileName):
 		if os.path.exists(fileName):
 			f = open(fileName, "r")
@@ -18,21 +18,31 @@ class LibratoChartSender():
 			print "Key file not found. Exiting"
 	    	sys.exit()
 
+	def make_request(self, chart_id, duration, user, api_key):
+		url = "https://metrics-api.librato.com/v1/snapshots"
+		param1 = "subject[chart][id]="+str(chart_id)
+		param2 = "subject[chart][source]=*"
+		param3 = "subject[chart][type]=stacked"
+		param4 = "duration="+str(duration)
 
-	def send_request(self, acc_name, iv_id, api_key):
-		#r = requests.get("https://" + acc_name + ".app.invoicexpress.com/invoices/" + iv_id + ".xml?api_key=" + api_key)
-		r = requests.post("https://metrics-api.librato.com/v1/snapshots?subject[chart][id]=3419&subject[chart][source]=*&subject[chart][type]=stacked&duration=604800", auth=("systems@rupeal.com", "b4bf0341c8cdd3b429826a18d1a07582895fa12c7fb97eb8f2c6bdb015004b86"))
-		return r.text
+		snap = requests.post(url+"?"+param1+"&"+param2+"&"+param3+"&"+param4, auth = (user, api_key))
+		return snap.text
 
-	def main(self, acc_name, iv_id, apkeyfile):
+	# def send_request(self, acc_name, iv_id, api_key):
+	# 	r = requests.get("https://" + acc_name + ".app.invoicexpress.com/invoices/" + iv_id + ".xml?api_key=" + api_key)
+	# 	return r.text
+
+	# def main(self, acc_name, iv_id, apkeyfile):
+	# 	api_key = self.read_api_key(apkeyfile)
+	# 	output = self.send_request(acc_name, iv_id, api_key)
+	# 	return output
+
+	def main(self, chart_id, duration, user, apkeyfile):
 		api_key = self.read_api_key(apkeyfile)
-		output = self.send_request(acc_name, iv_id, api_key)
+		output = self.make_request(chart_id, duration, user, api_key)
 		return output
 
-librato = LibratoChartSender().main("pawel-1", "8927119", "librato.key")
+# librato = LibratoChartSender().main("pawel-1", "8927119", "librato.key")
+librato = LibratoChartMaker().main("3419", "604800", "systems@rupeal.com", "librato.key")
 temp = json.loads(librato)
 print temp['href']
-
-"""
-api = librato.connect("systems@rupeal.com", "b4bf0341c8cdd3b429826a18d1a07582895fa12c7fb97eb8f2c6bdb015004b86")
-print api.get_chart(3419, 606)"""
