@@ -2,7 +2,7 @@ import requests
 import os.path
 import sys
 import librato
-
+import json
 
 class LibratoChartSender():
 	def read_api_key(self, fileName):
@@ -18,6 +18,7 @@ class LibratoChartSender():
 			print "Key file not found. Exiting"
 	    	sys.exit()
 
+
 	def send_request(self, acc_name, iv_id, api_key):
 		#r = requests.get("https://" + acc_name + ".app.invoicexpress.com/invoices/" + iv_id + ".xml?api_key=" + api_key)
 		r = requests.post("https://metrics-api.librato.com/v1/snapshots?subject[chart][id]=3419&subject[chart][source]=*&subject[chart][type]=stacked&duration=604800", auth=("systems@rupeal.com", "b4bf0341c8cdd3b429826a18d1a07582895fa12c7fb97eb8f2c6bdb015004b86"))
@@ -29,7 +30,8 @@ class LibratoChartSender():
 		return output
 
 librato = LibratoChartSender().main("pawel-1", "8927119", "librato.key")
-print librato
+temp = json.loads(librato)
+print temp['href']
 
 """
 api = librato.connect("systems@rupeal.com", "b4bf0341c8cdd3b429826a18d1a07582895fa12c7fb97eb8f2c6bdb015004b86")
