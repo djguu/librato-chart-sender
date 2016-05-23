@@ -56,7 +56,7 @@ class LibratoChartSender():
 librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key")
 chart1 = librato_chart.run("3419") # job delay
 chart2 = librato_chart.run("3420") # documents created
-print chart1, chart2
+# print chart1, chart2
 
 # teste = str(open("html/hero.html", "r").read())
 # teste.replace("chart1", chart1)
