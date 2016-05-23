@@ -7,6 +7,7 @@ import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 import ipdb
 import time
+
 class LibratoChartSender():
 
 	def read_api_key(self, fileName):
@@ -32,17 +33,17 @@ class LibratoChartSender():
 		return json.loads(snapshot_response.text)
 
 	def download_snapshot(self, url, user, api_key):
-		snapshots_image_response = False
-		while snapshots_image_response == False:
+		snapshots_image_response = None
+		while snapshots_image_response == None:
 		 	# time.sleep(1)
-			snapshots_image_response = requests.get(url, auth = (user, api_key))
-			response_object = json.loads(snapshots_image_response.text)
+			snapshots_image_response_request = requests.get(url, auth = (user, api_key))
+			response_object = json.loads(snapshots_image_response_request.text)
 			# ipdb.set_trace()
 			if response_object['image_href'] != None:
+				# ipdb.set_trace()
 				snapshots_image_response = response_object['image_href']
-			else:
-				snapshots_image_response = False
-		# 
+			# ipdb.set_trace()
+		
 		return snapshots_image_response
 
 	def main(self, chart_id, duration, user, apkeyfile):
@@ -53,5 +54,3 @@ class LibratoChartSender():
 
 
 LibratoChartSender().main("3419", "604800", "systems@rupeal.com", "librato.key")
-
-
