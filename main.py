@@ -5,15 +5,19 @@ import json
 import urllib3
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
-import ipdb
+# import ipdb
 import time
 
 class LibratoChartSender():
 
+	def __init__(self, duration, user, apkeyfile):
+		self.duration = duration
+		self.user = user
+		self.apkeyfile = apkeyfile
+
 	def read_api_key(self, fileName):
 		if os.path.exists(fileName):
-			f = open(fileName, "r")
-			api_key = f.read()
+			api_key = open(fileName, "r").read()
 			if(len(api_key) != 0):
 				return api_key
 			else:
@@ -33,21 +37,22 @@ class LibratoChartSender():
 		return json.loads(snapshot_response.text)
 
 	def download_snapshot(self, url, user, api_key):
-		snapshots_image_response = None
-		while snapshots_image_response == None:
-			snapshots_image_response_request = requests.get(url, auth = (user, api_key))
-			response_object = json.loads(snapshots_image_response_request.text)
-			# ipdb.set_trace()
+		snapshot_url = None
+		while snapshot_url == None:
+			snapshots_response = requests.get(url, auth = (user, api_key))
+			response_object = json.loads(snapshots_response.text)
 			if response_object['image_href'] != None:
-				snapshots_image_response = response_object['image_href']
-		
-		return snapshots_image_response
+				snapshot_url = response_object['image_href']
+			time.sleep(0.5)
+		return snapshot_url
 
-	def main(self, chart_id, duration, user, apkeyfile):
-		api_key = self.read_api_key(apkeyfile)
-		snapshot_url = self.make_snapshot(chart_id, duration, user, api_key)['href']
-		image_url = self.download_snapshot(snapshot_url, user, api_key)
+	def run(self, chart_id):
+		api_key = self.read_api_key(self.apkeyfile)
+		snapshot_url = self.make_snapshot(chart_id, self.duration, self.user, api_key)['href']
+		image_url = self.download_snapshot(snapshot_url, self.user, api_key)
 		print image_url
 
 
-LibratoChartSender().main("3419", "604800", "systems@rupeal.com", "librato.key")
+librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key")
+# librato_chart.run("3419") # job delay
+# librato_chart.run("3420") # documents created
