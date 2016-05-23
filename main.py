@@ -35,14 +35,11 @@ class LibratoChartSender():
 	def download_snapshot(self, url, user, api_key):
 		snapshots_image_response = None
 		while snapshots_image_response == None:
-		 	# time.sleep(1)
 			snapshots_image_response_request = requests.get(url, auth = (user, api_key))
 			response_object = json.loads(snapshots_image_response_request.text)
 			# ipdb.set_trace()
 			if response_object['image_href'] != None:
-				# ipdb.set_trace()
 				snapshots_image_response = response_object['image_href']
-			# ipdb.set_trace()
 		
 		return snapshots_image_response
 
