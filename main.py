@@ -5,7 +5,7 @@ import json
 import urllib3
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
-# import ipdb
+import ipdb
 import time
 
 class LibratoChartSender():
@@ -50,9 +50,15 @@ class LibratoChartSender():
 		api_key = self.read_api_key(self.apkeyfile)
 		snapshot_url = self.make_snapshot(chart_id, self.duration, self.user, api_key)['href']
 		image_url = self.download_snapshot(snapshot_url, self.user, api_key)
-		print image_url
+		return image_url
 
 
 librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key")
-# librato_chart.run("3419") # job delay
-# librato_chart.run("3420") # documents created
+chart1 = librato_chart.run("3419") # job delay
+chart2 = librato_chart.run("3420") # documents created
+print chart1, chart2
+
+# teste = str(open("html/hero.html", "r").read())
+# teste.replace("chart1", chart1)
+# teste.replace("chart2", chart2)
+# print teste
