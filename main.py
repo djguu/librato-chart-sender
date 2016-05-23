@@ -61,7 +61,7 @@ class HTMLEmailMaker():
 	def insert_snapshots(self, snap1, snap2):
 		read_html_file = open(self.file, "r").read()
 		template = Template(read_html_file)
-		print template.render(chart1 = snap1, chart2 = snap2)
+		return template.render(chart1 = snap1, chart2 = snap2)
 
 
 
@@ -70,4 +70,8 @@ librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key"
 # chart2 = librato_chart.run("3420") # documents created
 
 html_maker = HTMLEmailMaker("LCSHtml.html"	)
-html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
+write = html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
+
+target = open("teste.html", "w")
+ipdb.set_trace()
+target.write(write)
