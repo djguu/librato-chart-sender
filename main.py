@@ -7,6 +7,7 @@ import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 import ipdb
 import time
+from jinja2 import Template
 
 class LibratoChartSender():
 
@@ -52,13 +53,20 @@ class LibratoChartSender():
 		image_url = self.download_snapshot(snapshot_url, self.user, api_key)
 		return image_url
 
+class HTMLEmailMaker():
+
+	def __init__(self, html_file):
+		self.file = html_file
+
+	def insert_snapshots(self, snap1, snap2):
+		read_html_file = str(open(self.file, "r").read())
+		template = Template(read_html_file)
+		print template.render(chart1 = str(snap1), chart2 = str(snap2))
+
 
 librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key")
-chart1 = librato_chart.run("3419") # job delay
-chart2 = librato_chart.run("3420") # documents created
-# print chart1, chart2
+# chart1 = librato_chart.run("3419") # job delay
+# chart2 = librato_chart.run("3420") # documents created
 
-# teste = str(open("html/hero.html", "r").read())
-# teste.replace("chart1", chart1)
-# teste.replace("chart2", chart2)
-# print teste
+html_maker = HTMLEmailMaker("html/hero.html")
+html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
