@@ -73,5 +73,4 @@ html_maker = HTMLEmailMaker("LCSHtml.html"	)
 write = html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
 
 target = open("teste.html", "w")
-ipdb.set_trace()
 target.write(write)
