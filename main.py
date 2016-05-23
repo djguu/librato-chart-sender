@@ -59,9 +59,9 @@ class HTMLEmailMaker():
 		self.file = html_file
 
 	def insert_snapshots(self, snap1, snap2):
-		read_html_file = str(open(self.file, "r").read())
+		read_html_file = open(self.file, "r").read()
 		template = Template(read_html_file)
-		print template.render(chart1 = str(snap1), chart2 = str(snap2))
+		print template.render(chart1 = snap1, chart2 = snap2)
 
 
 librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key")
