@@ -64,9 +64,10 @@ class HTMLEmailMaker():
 		print template.render(chart1 = snap1, chart2 = snap2)
 
 
+
 librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key")
 # chart1 = librato_chart.run("3419") # job delay
 # chart2 = librato_chart.run("3420") # documents created
 
-html_maker = HTMLEmailMaker("html/hero.html")
+html_maker = HTMLEmailMaker("LCSHtml.html"	)
 html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
