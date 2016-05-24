@@ -58,10 +58,10 @@ class HTMLEmailMaker():
 	def __init__(self, html_file):
 		self.file = html_file
 
-	def insert_snapshots(self, snap_urls):
+	def insert_snapshots(self, snapshot_urls):
 		read_html_file = open(self.file, "r").read()
 		template = Template(read_html_file)
-		return template.render(charts = snap_urls)
+		return template.render(charts = snapshot_urls)
 
 class LibratoChartSender():
 	def __init__(self, librato_chart_ids, recipients_list):
@@ -76,7 +76,7 @@ class LibratoChartSender():
 
 	def run(self):
 		librato_shapshot_maker = LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
-		html_email_maker = HTMLEmailMaker("librato_chart_sender_template.html")
+		html_email_maker = HTMLEmailMaker("email_template.html")
 		#for loop
 		#...
 		for chart_id in self.librato_chart_ids:
