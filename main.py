@@ -77,7 +77,6 @@ class LibratoChartSender():
 
 	def save_html(self, file_name, code):
 		target = open(file_name, "w")
-		print "Test email file saved succesfully."
 		return target.write(code)
 
 	def send_simple_message(self, subject, email_body, api_key):
@@ -102,6 +101,7 @@ class LibratoChartSender():
 		email_body = html_email_maker.insert_snapshots(self.snapshot_urls)
 		if test_run:
 			self.save_html("test_email.html", email_body)
+			print "Test email file saved succesfully."
 		else:
 			self.send_simple_message('Librato Weekly Report', email_body, api_key)
 			print "E-mail sent succesfully"
