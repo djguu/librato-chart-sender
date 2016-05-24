@@ -9,12 +9,7 @@ import ipdb
 import time
 from jinja2 import Template
 
-class LibratoSnapshotMaker():
-
-	def __init__(self, duration, user, apkeyfile):
-		self.duration = duration
-		self.user = user
-		self.apkeyfile = apkeyfile
+class ApiKeyManager():
 
 	def read_api_key(self, fileName):
 		if os.path.exists(fileName):
@@ -27,6 +22,14 @@ class LibratoSnapshotMaker():
 		else:
 			print "Key file not found. Exiting"
 	    	sys.exit()
+
+
+class LibratoSnapshotMaker():
+
+	def __init__(self, duration, user, apkeyfile):
+		self.duration = duration
+		self.user = user
+		self.apkeyfile = apkeyfile
 
 	def make_snapshot(self, chart_id, duration, user, api_key):
 		url = "https://metrics-api.librato.com/v1/snapshots?" \
@@ -48,7 +51,7 @@ class LibratoSnapshotMaker():
 		return snapshot_url
 
 	def run(self, chart_id):
-		api_key = self.read_api_key(self.apkeyfile)
+		api_key = ApiKeyManager().read_api_key(self.apkeyfile)
 		snapshot_url = self.make_snapshot(chart_id, self.duration, self.user, api_key)['href']
 		image_url = self.download_snapshot(snapshot_url, self.user, api_key)
 		return image_url
@@ -77,21 +80,22 @@ class LibratoChartSender():
 		print "Test email file saved succesfully."
 		return target.write(code)
 
-	def send_simple_message(self, subject, email_body):
+	def send_simple_message(self, subject, email_body, api_key):
 	    return requests.post(
         "https://api.mailgun.net/v3/rupeal.com/messages",
-        auth = ("api", "key-a05af654983f6c57ec99904a3b84c7b3"),
+        auth = ("api", api_key),
         data = {
 			"from": "LibratoChartSender <librato_chart_sender@rupeal.com>",
 			"to": self.recipients_list,
 			"subject": subject,
-			"text": email_body
+			"html": email_body
 		})
+
 
 	def run(self, test_run=False):
 		librato_shapshot_maker = LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
 		html_email_maker = HTMLEmailMaker(self.TEST_EMAIL_FILE_NAME)
-
+		api_key = ApiKeyManager().read_api_key('mailgun.key')
 		for chart_id in self.librato_chart_ids:
 			self.snapshot_urls.append(librato_shapshot_maker.run(chart_id))
 		
@@ -99,8 +103,9 @@ class LibratoChartSender():
 		if test_run:
 			self.save_html("test_email.html", email_body)
 		else:
-			self.send_simple_message('Librato Weekly Report', email_body)
+			self.send_simple_message('Librato Weekly Report', email_body, api_key)
+			print "E-mail sent succesfully"
 		
 
-chart_sender = LibratoChartSender([3419, 3420], ['pawel.krysiak@rupeal.com'])
+chart_sender = LibratoChartSender([3419, 3420], ['goncalo.correia@rupeal.com', 'team-ix@rupeal.com', 'rui.alves@rupeal.com'])
 chart_sender.run()
