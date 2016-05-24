@@ -23,6 +23,6 @@ Go to the LibratoChartSender class and in the run function change the first para
 You need the have the "<file>.key" on your directory with the respective key 
 
 
-If you just want to test the app and check the generated email body, just type "True" (whithout the quotation marks), inside "chart_sender.run()"
+######If you just want to test the app and check the generated email body, just type "True" (whithout the quotation marks), inside "chart_sender.run()"
 
 
