@@ -77,34 +77,16 @@ class LibratoChartSender():
 	def run(self):
 		librato_shapshot_maker = LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
 		html_email_maker = HTMLEmailMaker("email_template.html")
-		#for loop
-		#...
+
 		for chart_id in self.librato_chart_ids:
 			self.snapshot_urls.append(librato_shapshot_maker.run(chart_id))
-		#end for loop
+		
+		
 		email_body = html_email_maker.insert_snapshots(self.snapshot_urls)
 		print email_body
 		
 		self.save_html("teste.html", email_body)
 		
-# jinja2 for loop
 
-"""------Main Program--------"""
 chart_sender = LibratoChartSender([3419, 3420], ['pawel.krysiak@rupeal.com'])
 chart_sender.run()
-
-
-# librato_chart = LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
-# chart1 = librato_chart.run("3419") # job delay
-# chart2 = librato_chart.run("3420") # documents created
-
-# html_maker = HTMLEmailMaker("librato_chart_sender_template.html")
-# write = html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
-
-
-# target = open("teste.html", "w")
-# target.write(write)
-
-# target = open("teste.html", "w")
-# ipdb.set_trace()
-# target.write(write)
