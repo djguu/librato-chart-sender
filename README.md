@@ -26,7 +26,7 @@ Just write on the LibratoChartSender object call as the second parameter
 ```sh
 chart_sender = LibratoChartSender([3419, 3420], ['team-ix@rupeal.com'])
 
-['team-ix@rupeal.com']-> Are the emails that we will use
+['team-ix@rupeal.com']-> Are the emails that will receve report
 ``` 
 
 ### Change chart duration
@@ -35,7 +35,7 @@ On the run() function at LibratoChartSender() class just change the first parame
 ```sh
 LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
 
-"604800"-> Is the number that you need to change
+"604800"-> Is the duration of the selected charts
 ``` 
 
 ### Change email subject
@@ -44,7 +44,7 @@ Go to the LibratoChartSender class and in the run function change the first para
 ```sh
 self.send_simple_message('Librato Weekly Report', email_body, api_key)
 
-'Librato Weekly Report'-> Is the parameter that you need to change
+'Librato Weekly Report'-> Is the subject of the email
 ``` 
 
 ### Change the api key
