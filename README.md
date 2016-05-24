@@ -56,7 +56,14 @@ You need the have the "<file>.key" on your directory with the respective key
 
 
 
-##### If you just want to test the app and check the generated email body, just type "True" (whithout the quotation marks), inside "chart_sender.run()"
+##### If you just want to test the app and check the generated email body, just type "True" (whithout the quotation marks)
+
+###### sample code:
+```sh
+chart_sender.run() -> This will send emails
+
+chart_sender.run(True) -> This will create a test_email.html file with the html generated
+``` 
 
 
 
