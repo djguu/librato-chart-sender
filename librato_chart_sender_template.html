@@ -24,25 +24,26 @@
 			<table>
 				<tr>
 					<td>
-						
 						<p><img src="https://goo.gl/qBDWV9"></p>
 						<h3>Librato Chart Sender<br>Weekly Report </h3>
 						<p class="lead"></p>
-						
+				{% for chart_id in charts %}
+				<tr>
+					<td>
 						<!-- A Real Hero (and a real human being) -->
-						<p><img src="{{ chart1 }}" /></p><!-- /hero -->
-						
-						
-</table><!-- /BODY -->
+						<p><img src="{{ chart_id }}" /></p><!-- /hero -->
+				{% endfor %}
+<!-- __________________________________ this will dissapear ___________________________-->
+<!--</table>
 <br><br><br>
 <table>
 				<tr>
 					<td>
-						<p><img src="{{ chart2 }}" /></p><!-- /hero -->
+						<p><img src="{{ chart2 }}" /></p>
 						
 						
-</table><!-- /BODY -->
-
+</table>-->
+<!-- __________________________________________________________________________________-->
 
 <!-- FOOTER -->
 <table class="footer-wrap">

@@ -9,7 +9,7 @@ import ipdb
 import time
 from jinja2 import Template
 
-class LibratoChartSender():
+class LibratoSnapshotMaker():
 
 	def __init__(self, duration, user, apkeyfile):
 		self.duration = duration
@@ -34,7 +34,7 @@ class LibratoChartSender():
 			   "subject[chart][source]=*&" \
 			   "subject[chart][type]=stacked&" \
 			   "duration={duration}"
-		snapshot_response = requests.post(url.format(chart_id=chart_id, duration=duration), auth = (user, api_key))
+		snapshot_response = requests.post(url.format(chart_id = chart_id, duration = duration), auth = (user, api_key))
 		return json.loads(snapshot_response.text)
 
 	def download_snapshot(self, url, user, api_key):
@@ -58,19 +58,53 @@ class HTMLEmailMaker():
 	def __init__(self, html_file):
 		self.file = html_file
 
-	def insert_snapshots(self, snap1, snap2):
+	def insert_snapshots(self, snap_urls):
 		read_html_file = open(self.file, "r").read()
 		template = Template(read_html_file)
-		return template.render(chart1 = snap1, chart2 = snap2)
+		return template.render(charts = snap_urls)
+
+class LibratoChartSender():
+	def __init__(self, librato_chart_ids, recipients_list):
+		self.librato_chart_ids = librato_chart_ids
+		self.recipients_list = recipients_list
+		self.snapshot_urls = []
+
+	def save_html(self, file_name, code):
+		target = open(file_name, "w")
+		print "file saved succesfully"
+		return target.write(code)
+
+	def run(self):
+		librato_shapshot_maker = LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
+		html_email_maker = HTMLEmailMaker("librato_chart_sender_template.html")
+		#for loop
+		#...
+		for chart_id in self.librato_chart_ids:
+			self.snapshot_urls.append(librato_shapshot_maker.run(chart_id))
+		#end for loop
+		email_body = html_email_maker.insert_snapshots(self.snapshot_urls)
+		print email_body
+		
+		self.save_html("teste.html", email_body)
+		
+# jinja2 for loop
+
+"""------Main Program--------"""
+chart_sender = LibratoChartSender([3419, 3420], ['pawel.krysiak@rupeal.com'])
+chart_sender.run()
 
 
-
-librato_chart = LibratoChartSender("604800", "systems@rupeal.com", "librato.key")
+# librato_chart = LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
 # chart1 = librato_chart.run("3419") # job delay
 # chart2 = librato_chart.run("3420") # documents created
 
-html_maker = HTMLEmailMaker("LCSHtml.html"	)
-write = html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
+# html_maker = HTMLEmailMaker("librato_chart_sender_template.html")
+# write = html_maker.insert_snapshots(librato_chart.run("3419"), librato_chart.run("3420"))
 
-target = open("teste.html", "w")
-target.write(write)
+
+# target = open("teste.html", "w")
+# target.write(write)
+
+# target = open("teste.html", "w")
+# ipdb.set_trace()
+# target.write(write)
