@@ -64,6 +64,9 @@ class HTMLEmailMaker():
 		return template.render(charts = snapshot_urls)
 
 class LibratoChartSender():
+
+	TEST_EMAIL_FILE_NAME = "email_template.html"
+
 	def __init__(self, librato_chart_ids, recipients_list):
 		self.librato_chart_ids = librato_chart_ids
 		self.recipients_list = recipients_list
@@ -71,21 +74,32 @@ class LibratoChartSender():
 
 	def save_html(self, file_name, code):
 		target = open(file_name, "w")
-		print "file saved succesfully"
+		print "Test email file saved succesfully."
 		return target.write(code)
 
-	def run(self):
+	def send_simple_message(self, subject, email_body):
+	    return requests.post(
+        "https://api.mailgun.net/v3/rupeal.com/messages",
+        auth = ("api", "key-a05af654983f6c57ec99904a3b84c7b3"),
+        data = {
+			"from": "LibratoChartSender <librato_chart_sender@rupeal.com>",
+			"to": self.recipients_list,
+			"subject": subject,
+			"text": email_body
+		})
+
+	def run(self, test_run=False):
 		librato_shapshot_maker = LibratoSnapshotMaker("604800", "systems@rupeal.com", "librato.key")
-		html_email_maker = HTMLEmailMaker("email_template.html")
+		html_email_maker = HTMLEmailMaker(self.TEST_EMAIL_FILE_NAME)
 
 		for chart_id in self.librato_chart_ids:
 			self.snapshot_urls.append(librato_shapshot_maker.run(chart_id))
 		
-		
 		email_body = html_email_maker.insert_snapshots(self.snapshot_urls)
-		print email_body
-		
-		self.save_html("teste.html", email_body)
+		if test_run:
+			self.save_html("test_email.html", email_body)
+		else:
+			self.send_simple_message('Librato Weekly Report', email_body)
 		
 
 chart_sender = LibratoChartSender([3419, 3420], ['pawel.krysiak@rupeal.com'])
