@@ -8,6 +8,7 @@ requests.packages.urllib3.disable_warnings()
 import ipdb
 import time
 from jinja2 import Template
+import unittest
 
 class ApiKeyManager():
 
@@ -107,5 +108,5 @@ class LibratoChartSender():
 			print "E-mail sent succesfully"
 		
 
-chart_sender = LibratoChartSender([3419, 3420], ['goncalo.correia@rupeal.com'])
-chart_sender.run()
+chart_sender = LibratoChartSender([3419, 3420, 3421], ['goncalo.correia@rupeal.com'])
+chart_sender.run(True)
