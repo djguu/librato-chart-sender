@@ -50,8 +50,8 @@ self.send_simple_message('Librato Weekly Report', email_body, api_key)
 ### Change the api key
 You need the have the "<file>.key" on your directory with the respective key
 ```
-'mailgun.key' = send_simple_message function (send emails)
-'librato.key' = LibratoSnapshotMaker class (access librato charts)
+'mailgun.key' = file with api key to rupeal mailgun
+'librato.key' = file with api key to rupeal librato 
 ``` 
 
 
