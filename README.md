@@ -14,7 +14,7 @@ You will need the last number (3419), and you need to put it on the LibratoChart
 
 ###### sample code:
 ```
-chart_sender = LibratoChartSender([3419, 3420], ['goncalo.correia@rupeal.com', 'team-ix@rupeal.com', 'rui.alves@rupeal.com'])
+chart_sender = LibratoChartSender([3419, 3420], ['goncalo.correia@rupeal.com', 'team-ix@rupeal.com'])
 
 [3419, 3420]-> are the charts we will choose
 ``` 
