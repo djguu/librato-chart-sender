@@ -48,6 +48,8 @@ self.send_simple_message('Librato Weekly Report', email_body, api_key)
 ``` 
 
 ### Change the api key
+Create a folder named keys on the root directory.
+
 You need the have the "<file>.key" on your directory with the respective key
 ```
 'mailgun.key' = file with api key to rupeal mailgun
@@ -63,7 +65,3 @@ chart_sender = LibratoChartSender([3419, 3420], ['pawel.krysiak@rupeal.com'])
 chart_sender.run(True) #-> test run ( produces html file )
 chart_sender.run() #-> normal run ( sends an email )
 ```
-
-
-
-
