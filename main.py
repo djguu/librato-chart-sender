@@ -46,5 +46,5 @@ class LibratoChartSender():
 			print "E-mail sent succesfully"
 		
 
-chart_sender = LibratoChartSender([3419, 3420, 3421], ['pawel.krysiak@rupeal.com'])
+chart_sender = LibratoChartSender([3419, 3420, 3421], ['gorgulho.joao000@gmail.com'])
 chart_sender.run()
