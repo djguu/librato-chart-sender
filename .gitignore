@@ -5,3 +5,4 @@ librato-chart-sender.sublime-project
 librato-chart-sender.sublime-workspace
 django/
 *.pyc
+.idea/*
