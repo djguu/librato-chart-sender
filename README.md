@@ -14,9 +14,9 @@ You will need the last number (3419), and you need to put it on the LibratoChart
 
 ###### sample code:
 ```
-chart_sender = LibratoChartSender([3419, 3420], ['goncalo.correia@rupeal.com', 'team-ix@rupeal.com'])
+chart_sender = LibratoChartSender( [3419, 3420, 3421], ['sampleemail@sample.com'], {'librato_api_key' : '<librato api_key>', 'mailgun_api_key' : '<mailgun api_key>' })
 
-[3419, 3420]-> are the charts we will choose
+[3419, 3420, 3421]-> are the charts we will choose
 ``` 
 
 
@@ -24,9 +24,9 @@ chart_sender = LibratoChartSender([3419, 3420], ['goncalo.correia@rupeal.com', '
 Just write on the LibratoChartSender object call as the second parameter
 ###### sample code:
 ```
-chart_sender = LibratoChartSender([3419, 3420], ['team-ix@rupeal.com'])
+chart_sender = LibratoChartSender( [3419, 3420, 3421], ['sampleemail@sample.com'], {'librato_api_key' : '<librato api_key>', 'mailgun_api_key' : '<mailgun api_key>' })
 
-['team-ix@rupeal.com']-> Are the emails that will receve report
+['sampleemail@sample.com']-> Are the emails that will recieve report
 ``` 
 
 ### Change chart duration
@@ -48,12 +48,12 @@ self.send_simple_message('Librato Weekly Report', email_body, api_key)
 ``` 
 
 ### Change the api key
-Create a folder named keys on the root directory.
-
-You need the have the "<file>.key" on your directory with the respective key
+On the LibratoChartSender class just change the parameters of the api_keys
+###### sample code:
 ```
-'mailgun.key' = file with api key to rupeal mailgun
-'librato.key' = file with api key to rupeal librato 
+chart_sender = LibratoChartSender( [3419, 3420, 3421], ['sampleemail@sample.com'], {'librato_api_key' : '<librato api_key>', 'mailgun_api_key' : '<mailgun api_key>' })
+
+<librato api_key>, <mailgun api_key> -> This fields correspond to proper api_keys from the mailgun and librato accounts
 ``` 
 
 
